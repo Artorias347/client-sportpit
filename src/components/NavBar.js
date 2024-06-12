@@ -52,6 +52,6 @@ const NavBar = observer(() => {
             )}
         </Nav>
     );
-};
+},
 
 export default NavBar;
