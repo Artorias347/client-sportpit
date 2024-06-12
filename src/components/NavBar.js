@@ -24,26 +24,14 @@ const NavBar = observer(() => {
         navigate(SHOP_ROUTE);
     };
 
-    return (
-        <Navbar bg="dark" variant="dark">
-            <Container>
-                <Nav className="mr-auto">
-                    <NavLink to={HOME_ROUTE} style={{ marginRight: '10px', marginTop: '-5px' }}>
-                        <Image src={logo} alt="Логотип" style={{ width: '182px', height: '44px' }}/>
+       return (
+        <Nav className="ml-auto" style={{ color: 'white' }}>
+            {isAuth ? (
+                <>
+                    <NavLink style={{ color: 'white', marginRight: '10px' }} to={BASKET_ROUTE}>
+                        <Button variant={"outline-light"}>Корзина</Button>
                     </NavLink>
-                    <NavLink style={{ color: 'white', marginRight: '10px' }} to={SHOP_ROUTE}>
-                        <Button variant={"outline-light"}>Магазин</Button>
-                    </NavLink>
-                    <NavLink style={{ color: 'white' }} to={REVIEW_ROUTE}>
-                        <Button variant={"outline-light"}>Отзывы</Button>
-                    </NavLink>
-                </Nav>
-
-                {user.isAuth ? (
-                    <Nav className="ml-auto" style={{ color: 'white' }}>
-                        <NavLink style={{ color: 'white', marginRight: '10px' }} to={BASKET_ROUTE}>
-                            <Button variant={"outline-light"}>Корзина</Button>
-                        </NavLink>
+                    {userRole === 'admin' && (
                         <Button
                             style={{ marginRight: '10px' }}
                             variant={"outline-light"}
@@ -51,21 +39,19 @@ const NavBar = observer(() => {
                         >
                             Админ панель
                         </Button>
-                        <Button
-                            variant={"outline-light"}
-                            onClick={logOut}
-                        >
-                            Выйти
-                        </Button>
-                    </Nav>
-                ) : (
-                    <Nav className="ml-auto" style={{ color: 'white' }}>
-                        <Button variant={"outline-light"} onClick={() => navigate(LOGIN_ROUTE)}>Авторизация</Button>
-                    </Nav>
-                )}
-            </Container>
-        </Navbar>
+                    )}
+                    <Button
+                        variant={"outline-light"}
+                        onClick={logOut}
+                    >
+                        Выйти
+                    </Button>
+                </>
+            ) : (
+                <Button variant={"outline-light"} onClick={() => navigate(LOGIN_ROUTE)}>Авторизация</Button>
+            )}
+        </Nav>
     );
-});
+};
 
 export default NavBar;
