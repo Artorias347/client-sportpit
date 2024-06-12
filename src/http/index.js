@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
+// Настройка уведомлений
 toast.configure();
 
 const $host = axios.create({
@@ -31,8 +33,7 @@ function logError(error) {
     if (process.env.NODE_ENV === 'development') {
         console.error('Error:', error);
     } else {
-        // Можно отправить ошибку на удаленный сервер логирования
-        // или просто игнорировать её
+        // В продакшене можно отправлять ошибки на сервер или игнорировать
     }
 }
 
