@@ -43,7 +43,7 @@ const DeviceList = observer(() => {
         <Row className="mb-4" key={rowIndex}>
           {row.map(product => (
             <Col md={4} key={product.id} className="d-flex align-items-stretch">
-              <Link to={`/product/${product.id}`} className="text-decoration-none text-dark"> {/* Wrap each product with Link */}
+              <Link to={`/product/${product.id}`} className="text-decoration-none text-dark w-100"> {/* Wrap the entire card with Link */}
                 <Card style={{ width: '16rem', minHeight: '250px', padding: '10px' }} className="d-flex flex-column">
                   <Image variant="top" src={process.env.REACT_APP_API_URL + product.img} style={{ height: '120px', objectFit: 'contain' }} />
                   <Card.Body className="d-flex flex-column justify-content-between">
