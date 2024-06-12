@@ -1,16 +1,17 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-// Создание базового клиента
+toast.configure();
+
 const $host = axios.create({
     baseURL: process.env.REACT_APP_API_URL
 });
 
-// Создание клиента для аутентифицированных запросов
 const $authHost = axios.create({
     baseURL: process.env.REACT_APP_API_URL
 });
 
-// Интерцептор для добавления токена в заголовки запросов
 const authInterceptor = config => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -21,15 +22,27 @@ const authInterceptor = config => {
 
 $authHost.interceptors.request.use(authInterceptor);
 
-// Перехватчик для обработки ошибок
+function notifyError(message) {
+    toast.error(message, {
+        position: toast.POSITION.BOTTOM_RIGHT
+    });
+}
+
+function logError(error) {
+    if (process.env.NODE_ENV === 'development') {
+        console.error('Error:', error);
+    } else {
+        // Можно отправить ошибку на удаленный сервер логирования
+        // или просто игнорировать её
+    }
+}
+
 $authHost.interceptors.response.use(
     response => response,
     async error => {
         if (error.response && error.response.status === 401) {
-            // Тихая обработка ошибки, можно логировать в файл или сервер
-            // Например, можно отправить информацию о ошибке в сервис логирования
-            // или просто игнорировать ошибку:
-            // logError(error); // функция для логирования ошибки
+            notifyError('Unauthorized access. Please log in again.');
+            logError(error);
         }
         return Promise.reject(error);
     }
