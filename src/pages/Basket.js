@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { observer } from "mobx-react-lite";
 import { Context } from "../index";
-import { Card, Col, Image, Button, Container, Row, Modal, Form } from "react-bootstrap";
+import { Card, Col, Image, Button, Container, Row, Modal, Form, Alert } from "react-bootstrap";
 import star from '../assets/star.png';
 
 const Basket = observer(() => {
@@ -12,6 +12,7 @@ const Basket = observer(() => {
         address: '',
         email: ''
     });
+    const [orderPlaced, setOrderPlaced] = useState(false); // State to track if order is placed
 
     const removeFromCart = (product) => {
         device.removeFromCart(product);
@@ -36,6 +37,7 @@ const Basket = observer(() => {
         // Здесь можно обработать отправку данных, например, отправить на сервер
         console.log('Order Data:', orderData);
         setShowModal(false);
+        setOrderPlaced(true); // Set orderPlaced to true after submitting the form
     };
 
     const handleChange = (e) => {
@@ -44,6 +46,10 @@ const Basket = observer(() => {
             ...orderData,
             [name]: value
         });
+    };
+
+    const handleReturnToMain = () => {
+        setOrderPlaced(false); // Reset orderPlaced state
     };
 
     return (
@@ -75,6 +81,12 @@ const Basket = observer(() => {
                         ))}
                     </div>
                     <Button variant="success" className="mt-3" onClick={handleOrder}>Оформить заказ</Button>
+                    {orderPlaced && ( // Display the message and return button if order is placed
+                        <div className="mt-3">
+                            <Alert variant="success">Заказ оформлен успешно!</Alert>
+                            <Button variant="primary" onClick={handleReturnToMain}>Вернуться на главную</Button>
+                        </div>
+                    )}
                 </div>
             </Row>
 
