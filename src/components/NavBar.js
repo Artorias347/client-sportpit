@@ -3,8 +3,8 @@ import { Context } from "../index";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { NavLink } from "react-router-dom";
-import { ADMIN_ROUTE, LOGIN_ROUTE, SHOP_ROUTE, BASKET_ROUTE } from "../utils/consts";
-import { Button, Container } from "react-bootstrap";
+import { ADMIN_ROUTE, LOGIN_ROUTE, SHOP_ROUTE, BASKET_ROUTE, HOME_ROUTE } from "../utils/consts";
+import { Button, Container, Image } from "react-bootstrap";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.png'; // Ensure the path to the logo is correct
