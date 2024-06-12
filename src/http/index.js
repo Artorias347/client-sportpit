@@ -27,6 +27,34 @@ $authHost.interceptors.response.use(
         return Promise.reject(error);
     }
 );
+async function refreshToken() {
+    try {
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/refresh-token`, {
+            // Добавьте нужные данные для обновления токена, например, refreshToken
+        });
+        const newToken = response.data.token;
+        localStorage.setItem('token', newToken);
+        $authHost.defaults.headers['Authorization'] = `Bearer ${newToken}`;
+        return newToken;
+    } catch (error) {
+        console.error('Error refreshing token:', error);
+        // Обработка ошибки обновления токена, например, перенаправление на страницу логина
+    }
+}
+
+$authHost.interceptors.response.use(
+    response => response,
+    async error => {
+        if (error.response && error.response.status === 401) {
+            const newToken = await refreshToken();
+            if (newToken) {
+                error.config.headers.authorization = `Bearer ${newToken}`;
+                return $authHost.request(error.config);
+            }
+        }
+        return Promise.reject(error);
+    }
+);
 
 export {
     $host,
