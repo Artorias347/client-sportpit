@@ -35,7 +35,7 @@ const NavBar = observer(() => {
                         <Button variant={"outline-light"}>Магазин</Button>
                     </NavLink>
                     <NavLink style={{ color: 'white' }} to={REVIEW_ROUTE}>
-                        <Button variant={"outline-light"}>Отзывы</Button>
+                        <Button variant={"outline-light"}>Обратная связь</Button>
                     </NavLink>
                 </Nav>
 
