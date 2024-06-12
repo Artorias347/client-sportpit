@@ -25,11 +25,11 @@ const Auth = observer(() => {
             } else {
                 data = await registration(email, password);
             }
-            user.setUser(user);
+            user.setUser(data);
             user.setIsAuth(true);
             navigate(SHOP_ROUTE);
         } catch (e) {
-            alert(e.response.data.message);
+            alert(e.response?.data?.message || 'Something went wrong');
         }
     };
 
@@ -55,15 +55,15 @@ const Auth = observer(() => {
                         type="password"
                     />
                     <Row className="d-flex justify-content-between mt-3 pl-3 pr-3">
-                        {isLogin ?
+                        {isLogin ? (
                             <div>
                                 Нет аккаунта? <NavLink to={REGISTRATION_ROUTE}>Зарегистрируйся!</NavLink>
                             </div>
-                            :
+                        ) : (
                             <div>
                                 Есть аккаунт? <NavLink to={LOGIN_ROUTE}>Войдите!</NavLink>
                             </div>
-                        }
+                        )}
                         <Button
                             variant={"outline-success"}
                             onClick={click}
