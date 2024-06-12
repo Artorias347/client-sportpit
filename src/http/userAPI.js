@@ -19,11 +19,11 @@ export const login = async (email, password, userContext) => {
     return decodedToken;
 }
 
-export const check = async (userContext) => {
+export const check = async (user) => {
     const { data } = await $authHost.get('api/user/auth');
     localStorage.setItem('token', data.token);
-    const decodedToken = jwtDecode(data.token);
-    userContext.setUser(decodedToken);
-    userContext.setIsAuth(true);
-    return decodedToken;
+    const decoded = jwtDecode(data.token);
+    user.setUser(decoded);  // Ensure the context user is passed correctly
+    user.setIsAuth(true);
+    return decoded;
 }
