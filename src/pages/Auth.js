@@ -5,12 +5,12 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE } from "../utils/consts";
-import { login, registration } from "../http/userAPI";
+import { login, registration, check } from "../http/userAPI";
 import { observer } from "mobx-react-lite";
 import { Context } from "../index";
 
 const Auth = observer(() => {
-    const { user } = useContext(Context);
+    const { user } = useContext(Context);  // Access user context
     const location = useLocation();
     const navigate = useNavigate();
     const isLogin = location.pathname === LOGIN_ROUTE;
@@ -25,7 +25,7 @@ const Auth = observer(() => {
             } else {
                 data = await registration(email, password);
             }
-            user.setUser(data);
+            user.setUser(data);  // Correctly update user context
             user.setIsAuth(true);
             navigate(SHOP_ROUTE);
         } catch (e) {
