@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx';
+import { makeAutoObservable } from "mobx";
 
 export default class UserStore {
     constructor() {
@@ -21,9 +21,5 @@ export default class UserStore {
 
     get user() {
         return this._user;
-    }
-
-    get role() {
-        return this._user.role;
     }
 }
