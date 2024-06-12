@@ -3,6 +3,8 @@ import { observer } from "mobx-react-lite";
 import { Context } from "../index";
 import { Card, Col, Image, Button, Container, Row, Modal, Form, Alert } from "react-bootstrap";
 import star from '../assets/star.png';
+import { Link } from 'react-router-dom';
+import { SHOP_ROUTE } from "../utils/consts";
 
 const Basket = observer(() => {
     const { device } = useContext(Context);
@@ -84,7 +86,9 @@ const Basket = observer(() => {
                     {orderPlaced && ( // Display the message and return button if order is placed
                         <div className="mt-3">
                             <Alert variant="success">Заказ оформлен успешно!</Alert>
-                            <Button variant="primary" onClick={handleReturnToMain}>Вернуться на главную</Button>
+                            <Link to={SHOP_ROUTE} className="btn btn-primary mt-3">
+                            Вернуться на главную
+                            </Link>
                         </div>
                     )}
                 </div>
