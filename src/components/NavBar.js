@@ -3,11 +3,11 @@ import { Context } from "../index";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { NavLink } from "react-router-dom";
-import { ADMIN_ROUTE, HOME_ROUTE, LOGIN_ROUTE, SHOP_ROUTE, BASKET_ROUTE, REVIEW_ROUTE } from "../utils/consts";
+import { ADMIN_ROUTE, SHOP_ROUTE, LOGIN_ROUTE, BASKET_ROUTE, REVIEW_ROUTE } from "../utils/consts";
 import { Button, Image, Container } from "react-bootstrap";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from 'react-router-dom';
-import logo from '../assets/logo.png'; // Ensure the path to the logo is correct
+import logo from '../assets/logo.png';
 
 const NavBar = observer(() => {
     const { user } = useContext(Context);
@@ -28,7 +28,7 @@ const NavBar = observer(() => {
         <Navbar bg="dark" variant="dark">
             <Container>
                 <Nav className="mr-auto">
-                    <NavLink to={HOME_ROUTE} style={{ marginRight: '10px', marginTop: '-5px' }}>
+                    <NavLink to={SHOP_ROUTE} style={{ marginRight: '10px', marginTop: '-5px' }}>
                         <Image src={logo} alt="Логотип" style={{ width: '182px', height: '44px' }}/>
                     </NavLink>
                     <NavLink style={{ color: 'white', marginRight: '10px' }} to={SHOP_ROUTE}>
@@ -44,7 +44,7 @@ const NavBar = observer(() => {
                         <NavLink style={{ color: 'white', marginRight: '10px' }} to={BASKET_ROUTE}>
                             <Button variant={"outline-light"}>Корзина</Button>
                         </NavLink>
-                        {user.userRole === 'admin' && (
+                        {user.user.role === 'ADMIN' && (
                             <Button
                                 style={{ marginRight: '10px' }}
                                 variant={"outline-light"}
