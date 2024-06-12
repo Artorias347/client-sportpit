@@ -1,13 +1,16 @@
 import axios from 'axios';
 
+// Создание базового клиента
 const $host = axios.create({
     baseURL: process.env.REACT_APP_API_URL
 });
 
+// Создание клиента для аутентифицированных запросов
 const $authHost = axios.create({
     baseURL: process.env.REACT_APP_API_URL
 });
 
+// Интерцептор для добавления токена в заголовки запросов
 const authInterceptor = config => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -18,39 +21,15 @@ const authInterceptor = config => {
 
 $authHost.interceptors.request.use(authInterceptor);
 
+// Перехватчик для обработки ошибок
 $authHost.interceptors.response.use(
     response => response,
     async error => {
         if (error.response && error.response.status === 401) {
-            console.error('Unauthorized access - perhaps the token is invalid or expired');
-        }
-        return Promise.reject(error);
-    }
-);
-async function refreshToken() {
-    try {
-        const response = await axios.post(`${process.env.REACT_APP_API_URL}/refresh-token`, {
-            // Добавьте нужные данные для обновления токена, например, refreshToken
-        });
-        const newToken = response.data.token;
-        localStorage.setItem('token', newToken);
-        $authHost.defaults.headers['Authorization'] = `Bearer ${newToken}`;
-        return newToken;
-    } catch (error) {
-        console.error('Error refreshing token:', error);
-        // Обработка ошибки обновления токена, например, перенаправление на страницу логина
-    }
-}
-
-$authHost.interceptors.response.use(
-    response => response,
-    async error => {
-        if (error.response && error.response.status === 401) {
-            const newToken = await refreshToken();
-            if (newToken) {
-                error.config.headers.authorization = `Bearer ${newToken}`;
-                return $authHost.request(error.config);
-            }
+            // Тихая обработка ошибки, можно логировать в файл или сервер
+            // Например, можно отправить информацию о ошибке в сервис логирования
+            // или просто игнорировать ошибку:
+            // logError(error); // функция для логирования ошибки
         }
         return Promise.reject(error);
     }
