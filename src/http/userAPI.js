@@ -1,5 +1,5 @@
 import { $host, $authHost } from "./index";
-import jwtDecode from "jwt-decode"; // Ensure you're using default export
+import { jwtDecode } from "jwt-decode"; // Ensure you're using default export
 
 export const registration = async (email, password, userContext) => {
     const { data } = await $host.post('api/user/registration', { email, password, role: 'USER' });
