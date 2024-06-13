@@ -1,10 +1,23 @@
-import React, { useContext } from 'react';
-import { Context } from "../../index";
+import React, { useContext, useEffect } from 'react';
 import { observer } from "mobx-react-lite";
-import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
+import { Context } from "../index";
+import { Container, Row, Col, Card, Button, Form, Spinner } from 'react-bootstrap';
 
 const ManageProducts = observer(() => {
     const { device } = useContext(Context);
+
+    useEffect(() => {
+        // Предположим, что fetchDevices() загружает устройства
+        device.fetchDevices();
+    }, [device]);
+
+    if (!device.devices) {
+        return <Spinner animation="border" />;
+    }
+
+    const handleStockChange = (productId, newStock) => {
+        device.updateStock(productId, parseInt(newStock));
+    };
 
     return (
         <Container>
@@ -26,7 +39,7 @@ const ManageProducts = observer(() => {
                                             <Form.Control 
                                                 type="number" 
                                                 defaultValue={product.stock} 
-                                                onChange={(e) => device.updateStock(product.id, e.target.value)} 
+                                                onChange={(e) => handleStockChange(product.id, e.target.value)} 
                                             />
                                         </Form.Group>
                                         <Button variant="primary" className="mt-2">
