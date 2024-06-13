@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { observer } from "mobx-react-lite";
-import { Context } from "../index";
+import { Context } from "../../index";
 import { Container, Row, Col, Card, Button, Form, Spinner } from 'react-bootstrap';
 
 const ManageProducts = observer(() => {
