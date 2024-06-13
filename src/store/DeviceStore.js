@@ -26,7 +26,7 @@ export default class DeviceStore {
         this._brands = brands;
     }
     setDevices(devices) {
-        this._devices = devices;
+        this._devices = devices.map(device => ({ ...device, stock: device.stock || 0 }));
     }
 
     setSelectedType(type) {
@@ -65,6 +65,12 @@ export default class DeviceStore {
     }
     removeFromCart(product) {
         this._cart = this._cart.filter(item => item.id !== product.id);
+    }
+
+    updateStock(productId, stock) {
+        this._devices = this._devices.map(device =>
+            device.id === productId ? { ...device, stock } : device
+        );
     }
 
     get types() {
