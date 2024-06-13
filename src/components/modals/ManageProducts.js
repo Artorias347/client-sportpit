@@ -65,7 +65,7 @@ const ManageProducts = observer(() => {
                     </tr>
                 </thead>
                 <tbody>
-                    {device.products.map((product) => (
+                    {device.products && device.products.map((product) => (
                         <tr key={product.id}>
                             <td>{product.id}</td>
                             <td>{product.name}</td>
