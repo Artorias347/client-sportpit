@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Table, Button, Modal, Form } from 'react-bootstrap';
 import { observer } from "mobx-react-lite";
-import { Context } from '../index';
+import { Context } from '../../index';
 
 const ManageProducts = observer(() => {
     const { device } = useContext(Context);
