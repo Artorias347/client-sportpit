@@ -1,57 +1,140 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { Table, Button, Modal, Form } from 'react-bootstrap';
 import { observer } from "mobx-react-lite";
-import { Context } from "../index";
-import { Container, Row, Col, Card, Button, Form, Spinner } from 'react-bootstrap';
+import { Context } from '../../index';
+import { fetchDevices } from '../../http/deviceAPI'; // Импортируем функцию для загрузки товаров
 
 const ManageProducts = observer(() => {
     const { device } = useContext(Context);
+    const [selectedProduct, setSelectedProduct] = useState(null);
+    const [showModal, setShowModal] = useState(false);
+    const [updatedProduct, setUpdatedProduct] = useState({ name: '', price: '', quantity: '' });
+    const [loading, setLoading] = useState(false); // Состояние загрузки данных
 
     useEffect(() => {
-        device.fetchDevices();
-    }, [device]);
+        fetchProducts(); // Загружаем товары при монтировании компонента
+    }, []);
 
-    if (!device.devices) {
-        return <Spinner animation="border" />;
-    }
-
-    const handleStockChange = (productId, newStock) => {
-        device.updateStock(productId, parseInt(newStock));
+    const fetchProducts = async () => {
+        setLoading(true);
+        try {
+            const data = await fetchDevices(null, null, 1, device.limit); // Загрузка товаров с использованием API функции
+            device.setProducts(data.rows); // Устанавливаем загруженные товары в состояние MobX
+            setLoading(false);
+        } catch (error) {
+            console.error('Ошибка загрузки товаров:', error);
+            setLoading(false);
+        }
     };
 
+    const handleEdit = (product) => {
+        setSelectedProduct(product);
+        setShowModal(true);
+        setUpdatedProduct({
+            name: product.name,
+            price: product.price,
+            quantity: product.quantity,
+        });
+    };
+
+    const handleSave = () => {
+        // Реализуйте логику сохранения изменений товара (например, обновление товара в хранилище)
+        device.updateProduct(selectedProduct.id, updatedProduct);
+        setShowModal(false);
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setUpdatedProduct({
+            ...updatedProduct,
+            [name]: value,
+        });
+    };
+
+    if (loading) {
+        return <p>Загрузка товаров...</p>; // Отображение сообщения о загрузке данных
+    }
+
     return (
-        <Container>
-            <h1>Управление товарами</h1>
-            {device.devices.length === 0 ? (
-                <p>Товары не найдены</p>
-            ) : (
-                <Row>
-                    {device.devices.map(product => (
-                        <Col md={4} key={product.id} className="mb-4">
-                            <Card>
-                                <Card.Img variant="top" src={product.img} />
-                                <Card.Body>
-                                    <Card.Title>{product.name}</Card.Title>
-                                    <Card.Text>Цена: {product.price}</Card.Text>
-                                    <Form>
-                                        <Form.Group controlId={`formQuantity${product.id}`}>
-                                            <Form.Label>Количество на складе</Form.Label>
-                                            <Form.Control 
-                                                type="number" 
-                                                defaultValue={product.stock} 
-                                                onChange={(e) => handleStockChange(product.id, e.target.value)} 
-                                            />
-                                        </Form.Group>
-                                        <Button variant="primary" className="mt-2" onClick={() => handleStockChange(product.id, product.stock)}>
-                                            Обновить
-                                        </Button>
-                                    </Form>
-                                </Card.Body>
-                            </Card>
-                        </Col>
+        <>
+            <Table striped bordered hover>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Название</th>
+                        <th>Цена</th>
+                        <th>Количество</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {device.products.map((product) => (
+                        <tr key={product.id}>
+                            <td>{product.id}</td>
+                            <td>{product.name}</td>
+                            <td>{product.price}</td>
+                            <td>{product.quantity}</td>
+                            <td>
+                                <Button variant="warning" onClick={() => handleEdit(product)}>
+                                    Редактировать
+                                </Button>
+                            </td>
+                        </tr>
                     ))}
-                </Row>
-            )}
-        </Container>
+                </tbody>
+            </Table>
+
+            <Modal show={showModal} onHide={() => setShowModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Редактировать товар</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group controlId="formName">
+                            <Form.Label>Название</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Введите название"
+                                name="name"
+                                value={updatedProduct.name}
+                                onChange={handleChange}
+                                required
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formPrice" className="mt-3">
+                            <Form.Label>Цена</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Введите цену"
+                                name="price"
+                                value={updatedProduct.price}
+                                onChange={handleChange}
+                                required
+                            />
+                        </Form.Group>
+                        <Form.Group controlId="formQuantity" className="mt-3">
+                            <Form.Label>Количество</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Введите количество"
+                                name="quantity"
+                                value={updatedProduct.quantity}
+                                onChange={handleChange}
+                                required
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowModal(false)}>
+                        Закрыть
+                    </Button>
+                    <Button variant="primary" onClick={handleSave}>
+                        Сохранить изменения
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
     );
 });
 
