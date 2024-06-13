@@ -51,7 +51,7 @@ const Admin = () => {
                 className="mt-4 p-2"
                 onClick={() => setDeviceVisible(true)}
             >
-                Удалить товар
+                Управление товаром
             </Button>
 
             <CreateBrand show={brandVisible} onHide={() => setBrandVisible(false)} />
