@@ -2,25 +2,28 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Table, Button, Modal, Form } from 'react-bootstrap';
 import { observer } from "mobx-react-lite";
 import { Context } from '../../index';
+import { fetchDevices } from '../../http/deviceAPI';
 
 const ManageProducts = observer(() => {
     const { device } = useContext(Context);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [updatedProduct, setUpdatedProduct] = useState({ name: '', price: '', quantity: '' });
-    const [loading, setLoading] = useState(true); // Начальная загрузка
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         fetchProducts();
     }, []);
 
     const fetchProducts = async () => {
+        setLoading(true);
         try {
-            // Логика загрузки данных товаров
-            setLoading(false); // Установка флага загрузки в false после загрузки данных
+            const data = await fetchDevices(null, null, 1, device.limit);
+            device.setDevices(data.rows); // Используем метод setDevices вместо setProducts
+            setLoading(false);
         } catch (error) {
             console.error('Ошибка загрузки товаров:', error);
-            setLoading(false); // Обработка ошибки загрузки
+            setLoading(false);
         }
     };
 
@@ -35,7 +38,7 @@ const ManageProducts = observer(() => {
     };
 
     const handleSave = () => {
-        // Логика сохранения обновленных данных
+        device.updateProduct(selectedProduct.id, updatedProduct);
         setShowModal(false);
     };
 
@@ -64,7 +67,7 @@ const ManageProducts = observer(() => {
                     </tr>
                 </thead>
                 <tbody>
-                    {device.products && device.products.map((product) => (
+                    {device.devices.map((product) => (
                         <tr key={product.id}>
                             <td>{product.id}</td>
                             <td>{product.name}</td>
