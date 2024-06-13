@@ -68,19 +68,19 @@ const ManageProducts = observer(() => {
                     </tr>
                 </thead>
                 <tbody>
-                    {device.products.map((product) => (
-                        <tr key={product.id}>
-                            <td>{product.id}</td>
-                            <td>{product.name}</td>
-                            <td>{product.price}</td>
-                            <td>{product.quantity}</td>
-                            <td>
-                                <Button variant="warning" onClick={() => handleEdit(product)}>
-                                    Редактировать
-                                </Button>
-                            </td>
-                        </tr>
-                    ))}
+                    {device.products && device.products.map((product) => (
+                            <tr key={product.id}>
+                                <td>{product.id}</td>
+                                <td>{product.name}</td>
+                                <td>{product.price}</td>
+                                <td>{product.quantity}</td>
+                                <td>
+                            <Button variant="warning" onClick={() => handleEdit(product)}>
+                                Редактировать
+                            </Button>
+                        </td>
+                    </tr>
+                ))}
                 </tbody>
             </Table>
 
