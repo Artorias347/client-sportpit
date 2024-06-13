@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Context } from "../index";
+import { Context } from "../../index";
 import { observer } from "mobx-react-lite";
 import { Container, Row, Col, Card, Button, Form } from 'react-bootstrap';
 
