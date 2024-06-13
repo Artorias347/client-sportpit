@@ -1,4 +1,5 @@
 import { makeAutoObservable } from "mobx";
+import axios from 'axios';
 
 export default class DeviceStore {
     constructor() {
@@ -71,6 +72,15 @@ export default class DeviceStore {
         this._devices = this._devices.map(device =>
             device.id === productId ? { ...device, stock } : device
         );
+    }
+
+    async fetchDevices() {
+        try {
+            const response = await axios.get('your-api-endpoint/devices');
+            this.setDevices(response.data);
+        } catch (error) {
+            console.error('Failed to fetch devices', error);
+        }
     }
 
     get types() {
