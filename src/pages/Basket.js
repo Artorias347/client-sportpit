@@ -82,12 +82,16 @@ const Basket = observer(() => {
                             </Col>
                         ))}
                     </div>
-                    <Button variant="success" className="mt-3" onClick={handleOrder}>Оформить заказ</Button>
+                    {device.cart.length > 0 ? (
+                        <Button variant="success" className="mt-3" onClick={handleOrder}>Оформить заказ</Button>
+                    ) : (
+                        <Alert variant="warning" className="mt-3">Добавьте товар в корзину</Alert>
+                    )}
                     {orderPlaced && ( // Display the message and return button if order is placed
                         <div className="mt-3">
                             <Alert variant="success">Заказ оформлен успешно!</Alert>
                             <Link to={SHOP_ROUTE} className="btn btn-primary mt-3">
-                            Вернуться на главную
+                                Вернуться на главную
                             </Link>
                         </div>
                     )}
