@@ -8,20 +8,19 @@ const ManageProducts = observer(() => {
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [updatedProduct, setUpdatedProduct] = useState({ name: '', price: '', quantity: '' });
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true); // Начальная загрузка
 
     useEffect(() => {
         fetchProducts();
     }, []);
 
     const fetchProducts = async () => {
-        setLoading(true);
         try {
-            // Логика загрузки данных товаров, если требуется
-            setLoading(false);
+            // Логика загрузки данных товаров
+            setLoading(false); // Установка флага загрузки в false после загрузки данных
         } catch (error) {
             console.error('Ошибка загрузки товаров:', error);
-            setLoading(false);
+            setLoading(false); // Обработка ошибки загрузки
         }
     };
 
@@ -36,7 +35,7 @@ const ManageProducts = observer(() => {
     };
 
     const handleSave = () => {
-        // Ваша логика сохранения обновленных данных
+        // Логика сохранения обновленных данных
         setShowModal(false);
     };
 
