@@ -73,6 +73,12 @@ export default class DeviceStore {
             device.id === productId ? { ...device, stock } : device
         );
     }
+     updateProduct(productId, updatedProductData) {
+        const index = this.devices.findIndex(product => product.id === productId);
+        if (index !== -1) {
+            this.devices[index] = { ...this.devices[index], ...updatedProductData };
+        }
+    }
 
     async fetchDevices() {
         try {
