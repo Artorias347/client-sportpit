@@ -1,13 +1,12 @@
 import React, { useContext, useEffect } from 'react';
 import { observer } from "mobx-react-lite";
-import { Context } from "../../index";
+import { Context } from "../index";
 import { Container, Row, Col, Card, Button, Form, Spinner } from 'react-bootstrap';
 
 const ManageProducts = observer(() => {
     const { device } = useContext(Context);
 
     useEffect(() => {
-        // Предположим, что fetchDevices() загружает устройства
         device.fetchDevices();
     }, [device]);
 
@@ -42,7 +41,7 @@ const ManageProducts = observer(() => {
                                                 onChange={(e) => handleStockChange(product.id, e.target.value)} 
                                             />
                                         </Form.Group>
-                                        <Button variant="primary" className="mt-2">
+                                        <Button variant="primary" className="mt-2" onClick={() => handleStockChange(product.id, product.stock)}>
                                             Обновить
                                         </Button>
                                     </Form>
