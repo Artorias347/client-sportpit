@@ -66,6 +66,12 @@ export default class DeviceStore {
     removeFromCart(product) {
         this._cart = this._cart.filter(item => item.id !== product.id);
     }
+    
+    updateProduct(productId, updatedProduct) {
+        this._devices = this._devices.map(product =>
+            product.id === productId ? { ...product, ...updatedProduct } : product
+        );
+    }
 
     get types() {
         return this._types;
