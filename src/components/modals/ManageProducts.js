@@ -36,7 +36,7 @@ const ManageProducts = observer(() => {
     };
 
     const handleSave = () => {
-        device.updateProduct(selectedProduct.id, updatedProduct); // Вызываем метод updateProduct из хранилища
+        // Ваша логика сохранения обновленных данных
         setShowModal(false);
     };
 
