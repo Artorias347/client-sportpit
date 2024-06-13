@@ -2,24 +2,24 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Table, Button, Modal, Form } from 'react-bootstrap';
 import { observer } from "mobx-react-lite";
 import { Context } from '../../index';
-import { fetchDevices } from '../../http/deviceAPI'; // Импортируем функцию для загрузки товаров
+import { fetchDevices } from '../../http/deviceAPI';
 
 const ManageProducts = observer(() => {
     const { device } = useContext(Context);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [showModal, setShowModal] = useState(false);
     const [updatedProduct, setUpdatedProduct] = useState({ name: '', price: '', quantity: '' });
-    const [loading, setLoading] = useState(false); // Состояние загрузки данных
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        fetchProducts(); // Загружаем товары при монтировании компонента
+        fetchProducts();
     }, []);
 
     const fetchProducts = async () => {
         setLoading(true);
         try {
-            const data = await fetchDevices(null, null, 1, device.limit); // Загрузка товаров с использованием API функции
-            device.setProducts(data.rows); // Устанавливаем загруженные товары в состояние MobX
+            const data = await fetchDevices(null, null, 1, device.limit);
+            device.setDevices(data.rows); // Используем метод setDevices вместо setProducts
             setLoading(false);
         } catch (error) {
             console.error('Ошибка загрузки товаров:', error);
@@ -38,7 +38,6 @@ const ManageProducts = observer(() => {
     };
 
     const handleSave = () => {
-        // Реализуйте логику сохранения изменений товара (например, обновление товара в хранилище)
         device.updateProduct(selectedProduct.id, updatedProduct);
         setShowModal(false);
     };
@@ -52,7 +51,7 @@ const ManageProducts = observer(() => {
     };
 
     if (loading) {
-        return <p>Загрузка товаров...</p>; // Отображение сообщения о загрузке данных
+        return <p>Загрузка товаров...</p>;
     }
 
     return (
@@ -68,19 +67,19 @@ const ManageProducts = observer(() => {
                     </tr>
                 </thead>
                 <tbody>
-                    {device.products && device.products.map((product) => (
-                            <tr key={product.id}>
-                                <td>{product.id}</td>
-                                <td>{product.name}</td>
-                                <td>{product.price}</td>
-                                <td>{product.quantity}</td>
-                                <td>
-                            <Button variant="warning" onClick={() => handleEdit(product)}>
-                                Редактировать
-                            </Button>
-                        </td>
-                    </tr>
-                ))}
+                    {device.devices.map((product) => (
+                        <tr key={product.id}>
+                            <td>{product.id}</td>
+                            <td>{product.name}</td>
+                            <td>{product.price}</td>
+                            <td>{product.quantity}</td>
+                            <td>
+                                <Button variant="warning" onClick={() => handleEdit(product)}>
+                                    Редактировать
+                                </Button>
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
             </Table>
 
