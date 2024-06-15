@@ -73,6 +73,10 @@ export default class DeviceStore {
         this._cart = [];
         this.saveCart();
     }
+    setCart(cart) {
+        this._cart = cart;
+        this.saveCart();
+    }
     saveCart() {
         localStorage.setItem('cart', JSON.stringify(this._cart));
     }
@@ -82,7 +86,7 @@ export default class DeviceStore {
             device.id === productId ? { ...device, stock } : device
         );
     }
-     updateProduct(productId, updatedProductData) {
+    updateProduct(productId, updatedProductData) {
         const index = this._devices.findIndex(product => product.id === productId);
         if (index !== -1) {
             this._devices[index] = { ...this._devices[index], ...updatedProductData };
