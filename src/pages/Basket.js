@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { SHOP_ROUTE } from "../utils/consts";
 
 const Basket = observer(() => {
-    const { device } = useContext(Context);
+    const { device, user } = useContext(Context); // предполагается, что у вас есть объект user в контексте
     const [showModal, setShowModal] = useState(false);
     const [orderData, setOrderData] = useState({
         name: '',
@@ -17,14 +17,13 @@ const Basket = observer(() => {
     const [orderPlaced, setOrderPlaced] = useState(false);
 
     useEffect(() => {
-        const savedCart = localStorage.getItem('cart');
-        if (savedCart) {
-            device.setCart(JSON.parse(savedCart));
+        if (user.isAuth) {
+            device.fetchCart(user.id); // Получение корзины пользователя при загрузке компонента
         }
-    }, [device]);
+    }, [device, user]);
 
-    const removeFromCart = (product) => {
-        device.removeFromCart(product);
+    const removeFromCart = (productId) => {
+        device.removeFromCartAPI(user.id, productId); // Удаление товара из корзины через API
     };
 
     const getTypeName = (typeId) => {
@@ -61,8 +60,7 @@ const Basket = observer(() => {
             });
             if (response.ok) {
                 setOrderPlaced(true); // Установка флага, что заказ оформлен успешно
-                device.clearCart(); // Очистка корзины после успешного оформления заказа
-                localStorage.removeItem('cart'); // Удаление корзины из локального хранилища
+                device.clearCartAPI(user.id); // Очистка корзины после успешного оформления заказа через API
             } else {
                 console.error('Ошибка при оформлении заказа:', response.statusText);
             }
