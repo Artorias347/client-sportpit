@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { Table, Button, Modal, Form } from 'react-bootstrap';
 import { observer } from "mobx-react-lite";
 import { Context } from '../../index';
@@ -11,11 +11,7 @@ const ManageProducts = observer(() => {
     const [updatedProduct, setUpdatedProduct] = useState({ name: '', price: '', stock: '' });
     const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-        fetchProducts();
-    }, []);
-
-    const fetchProducts = async () => {
+    const fetchProducts = useCallback(async () => {
         setLoading(true);
         try {
             const data = await fetchDevices(null, null, 1, device.limit);
@@ -25,7 +21,11 @@ const ManageProducts = observer(() => {
             console.error('Ошибка загрузки товаров:', error);
             setLoading(false);
         }
-    };
+    }, [device]);
+
+    useEffect(() => {
+        fetchProducts();
+    }, [fetchProducts]);
 
     const handleEdit = (product) => {
         setSelectedProduct(product);
