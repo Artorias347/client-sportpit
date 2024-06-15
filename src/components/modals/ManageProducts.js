@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { Table, Button, Modal, Form } from 'react-bootstrap';
 import { observer } from "mobx-react-lite";
 import { Context } from '../../index';
-import { fetchDevices } from '../../http/deviceAPI';
+import { fetchDevices, updateDevice } from '../../http/deviceAPI';
 
 const ManageProducts = observer(() => {
     const { device } = useContext(Context);
@@ -15,7 +15,7 @@ const ManageProducts = observer(() => {
         setLoading(true);
         try {
             const data = await fetchDevices(null, null, 1, device.limit);
-            device.setDevices(data.rows); // Используем метод setDevices вместо setProducts
+            device.setDevices(data.rows);
             setLoading(false);
         } catch (error) {
             console.error('Ошибка загрузки товаров:', error);
@@ -37,9 +37,14 @@ const ManageProducts = observer(() => {
         });
     };
 
-    const handleSave = () => {
-        device.updateProduct(selectedProduct.id, updatedProduct);
-        setShowModal(false);
+    const handleSave = async () => {
+        try {
+            await updateDevice(selectedProduct.id, updatedProduct);
+            await fetchProducts(); // Повторно получаем обновленные данные
+            setShowModal(false);
+        } catch (error) {
+            console.error('Ошибка обновления товара:', error);
+        }
     };
 
     const handleChange = (e) => {
