@@ -108,7 +108,7 @@ const ManageProducts = observer(() => {
                         <Form.Group controlId="formPrice" className="mt-3">
                             <Form.Label>Цена</Form.Label>
                             <Form.Control
-                                type="text"
+                                type="number" // Измените на number для числового ввода
                                 placeholder="Введите цену"
                                 name="price"
                                 value={updatedProduct.price}
@@ -119,7 +119,7 @@ const ManageProducts = observer(() => {
                         <Form.Group controlId="formStock" className="mt-3">
                             <Form.Label>Количество</Form.Label>
                             <Form.Control
-                                type="text"
+                                type="number" // Измените на number для числового ввода
                                 placeholder="Введите количество"
                                 name="stock"
                                 value={updatedProduct.stock}
