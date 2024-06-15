@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { observer } from "mobx-react-lite";
 import { Context } from "../index";
 import { Card, Col, Image, Button, Container, Row, Modal, Form, Alert } from "react-bootstrap";
@@ -15,6 +15,17 @@ const Basket = observer(() => {
         email: ''
     });
     const [orderPlaced, setOrderPlaced] = useState(false); // State to track if order is placed
+
+    useEffect(() => {
+        const savedCart = localStorage.getItem('cart');
+        if (savedCart) {
+            device.setCart(JSON.parse(savedCart));
+        }
+    }, [device]);
+
+    useEffect(() => {
+        localStorage.setItem('cart', JSON.stringify(device.cart));
+    }, [device.cart]);
 
     const removeFromCart = (product) => {
         device.removeFromCart(product);
@@ -55,6 +66,7 @@ const Basket = observer(() => {
             if (response.ok) {
                 setOrderPlaced(true); // Установка флага, что заказ оформлен успешно
                 device.clearCart(); // Очистка корзины после успешного оформления заказа
+                localStorage.removeItem('cart'); // Удаление корзины из локального хранилища
             } else {
                 console.error('Ошибка при оформлении заказа:', response.statusText);
             }
