@@ -23,10 +23,6 @@ const Basket = observer(() => {
         }
     }, [device]);
 
-    useEffect(() => {
-        localStorage.setItem('cart', JSON.stringify(device.cart));
-    }, [device.cart]);
-
     const removeFromCart = (product) => {
         device.removeFromCart(product);
     };
