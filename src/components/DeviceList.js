@@ -1,4 +1,4 @@
-import React, { useState, useContext  } from 'react';
+import React, { useState, useContext } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Card, Row, Col, Button, Image } from 'react-bootstrap';
 import { Context } from '../index';
@@ -55,13 +55,23 @@ const DeviceList = observer(() => {
                   <Card.Text style={{ fontSize: '0.9rem' }}>
                     Бренд: {getBrandName(product.brandId)}
                   </Card.Text>
+                  <Card.Text style={{ fontSize: '0.9rem' }}>
+                    Количество: {product.stock > 0 ? product.stock : 'Нет в наличии'}
+                  </Card.Text>
                   <div className="d-flex justify-content-between align-items-center mt-auto">
                     <div className="d-flex align-items-center">
                       <span style={{ fontSize: '0.8rem' }}>{product.rating}</span>
                       <Image width={14} height={14} src={star} />
                     </div>
                   </div>
-                  <Button variant="success" className="mt-2 align-self-end" onClick={() => addToCart(product)}>Купить</Button>
+                  <Button 
+                    variant="success" 
+                    className="mt-2 align-self-end" 
+                    onClick={() => addToCart(product)}
+                    disabled={product.stock === 0} // Отключение кнопки, если товар отсутствует
+                  >
+                    Купить
+                  </Button>
                 </Card.Body>
               </Card>
             </Col>
