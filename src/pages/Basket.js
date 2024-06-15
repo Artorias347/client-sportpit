@@ -34,12 +34,34 @@ const Basket = observer(() => {
         setShowModal(true);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Здесь можно обработать отправку данных, например, отправить на сервер
-        console.log('Order Data:', orderData);
-        setShowModal(false);
-        setOrderPlaced(true); // Set orderPlaced to true after submitting the form
+        try {
+            const order = {
+                ...orderData,
+                cart: device.cart.map(item => ({
+                    id: item.id,
+                    quantity: item.quantity
+                }))
+            };
+            // Отправка заказа на сервер
+            const response = await fetch('/api/order/place', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(order)
+            });
+            if (response.ok) {
+                setOrderPlaced(true); // Установка флага, что заказ оформлен успешно
+                device.clearCart(); // Очистка корзины после успешного оформления заказа
+            } else {
+                console.error('Ошибка при оформлении заказа:', response.statusText);
+            }
+            setShowModal(false);
+        } catch (error) {
+            console.error('Ошибка при отправке заказа:', error);
+        }
     };
 
     const handleChange = (e) => {
@@ -51,7 +73,7 @@ const Basket = observer(() => {
     };
 
     const handleReturnToMain = () => {
-        setOrderPlaced(false); // Reset orderPlaced state
+        setOrderPlaced(false); // Сброс флага оформления заказа
     };
 
     return (
@@ -70,7 +92,7 @@ const Basket = observer(() => {
                                         <Card.Subtitle className="mb-2 text-muted" style={{ fontSize: '0.8rem' }}>Тип: {getTypeName(product.typeId)}</Card.Subtitle>
                                         <Card.Subtitle className="mb-2 text-muted" style={{ fontSize: '0.8rem' }}>Бренд: {getBrandName(product.brandId)}</Card.Subtitle>
                                         <div className="d-flex justify-content-between align-items-center mt-auto">
-                                            <span style={{ fontSize: '0.8rem' }}>{product.brand}</span>
+                                            <span style={{ fontSize: '0.8rem' }}>{product.quantity} шт.</span>
                                             <div className="d-flex align-items-center">
                                                 <span style={{ fontSize: '0.8rem' }}>{product.rating}</span>
                                                 <Image width={14} height={14} src={star} />
@@ -87,7 +109,7 @@ const Basket = observer(() => {
                     ) : (
                         <Alert variant="warning" className="mt-3">Добавьте товар в корзину</Alert>
                     )}
-                    {orderPlaced && ( // Display the message and return button if order is placed
+                    {orderPlaced && (
                         <div className="mt-3">
                             <Alert variant="success">Заказ оформлен успешно!</Alert>
                             <Link to={SHOP_ROUTE} className="btn btn-primary mt-3">
