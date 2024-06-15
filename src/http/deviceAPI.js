@@ -44,4 +44,8 @@ export const fetchOneDevice = async (id) => {
     const {data} = await $host.get('api/device/' + id)
     return data
 }
+export const updateDevice = async (id, updatedDevice) => {
+    const { data } = await $authHost.put(`api/device/${id}`, updatedDevice);
+    return data;
+};
 
