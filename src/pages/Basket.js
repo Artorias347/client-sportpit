@@ -14,7 +14,7 @@ const Basket = observer(() => {
         address: '',
         email: ''
     });
-    const [orderPlaced, setOrderPlaced] = useState(false); // State to track if order is placed
+    const [orderPlaced, setOrderPlaced] = useState(false);
 
     useEffect(() => {
         const savedCart = localStorage.getItem('cart');
