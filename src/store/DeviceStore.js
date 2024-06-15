@@ -15,7 +15,7 @@ export default class DeviceStore {
         this._priceRange = { min: 0, max: 10000 };
         this._showInStock = false;
         this._showDiscounted = false;
-        this._cart = [];
+        this._cart = JSON.parse(localStorage.getItem('cart')) || [];
 
         makeAutoObservable(this);
     }
@@ -63,9 +63,18 @@ export default class DeviceStore {
     }
     addToCart(product) {
         this._cart.push(product);
+        this.saveCart();
     }
     removeFromCart(product) {
         this._cart = this._cart.filter(item => item.id !== product.id);
+        this.saveCart();
+    }
+    clearCart() {
+        this._cart = [];
+        this.saveCart();
+    }
+    saveCart() {
+        localStorage.setItem('cart', JSON.stringify(this._cart));
     }
 
     updateStock(productId, stock) {
@@ -74,9 +83,9 @@ export default class DeviceStore {
         );
     }
      updateProduct(productId, updatedProductData) {
-        const index = this.devices.findIndex(product => product.id === productId);
+        const index = this._devices.findIndex(product => product.id === productId);
         if (index !== -1) {
-            this.devices[index] = { ...this.devices[index], ...updatedProductData };
+            this._devices[index] = { ...this._devices[index], ...updatedProductData };
         }
     }
 
