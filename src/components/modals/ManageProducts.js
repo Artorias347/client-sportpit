@@ -8,7 +8,7 @@ const ManageProducts = observer(() => {
     const { device } = useContext(Context);
     const [selectedProduct, setSelectedProduct] = useState(null);
     const [showModal, setShowModal] = useState(false);
-    const [updatedProduct, setUpdatedProduct] = useState({ name: '', price: '', quantity: '' });
+    const [updatedProduct, setUpdatedProduct] = useState({ name: '', price: '', stock: '' });
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
@@ -33,7 +33,7 @@ const ManageProducts = observer(() => {
         setUpdatedProduct({
             name: product.name,
             price: product.price,
-            quantity: product.quantity,
+            stock: product.stock,
         });
     };
 
@@ -72,7 +72,7 @@ const ManageProducts = observer(() => {
                             <td>{product.id}</td>
                             <td>{product.name}</td>
                             <td>{product.price}</td>
-                            <td>{product.quantity}</td>
+                            <td>{product.stock > 0 ? product.stock : 'Нет в наличии'}</td>
                             <td>
                                 <Button variant="warning" onClick={() => handleEdit(product)}>
                                     Редактировать
@@ -111,13 +111,13 @@ const ManageProducts = observer(() => {
                                 required
                             />
                         </Form.Group>
-                        <Form.Group controlId="formQuantity" className="mt-3">
+                        <Form.Group controlId="formStock" className="mt-3">
                             <Form.Label>Количество</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Введите количество"
-                                name="quantity"
-                                value={updatedProduct.quantity}
+                                name="stock"
+                                value={updatedProduct.stock}
                                 onChange={handleChange}
                                 required
                             />
