@@ -22,7 +22,7 @@ const Basket = observer(() => {
         }
     }, [device, user]);
 
-    const removeFromCart = (productId) => {
+    const removeItemFromCart = (productId) => { // Переименование функции
         device.removeFromCartAPI(user.id, productId);
     };
 
@@ -39,9 +39,6 @@ const Basket = observer(() => {
     const handleOrder = () => {
         setShowModal(true);
     };
-    const removeFromCart = (productId) => {
-    device.removeFromCartAPI(user.id, productId);
-};
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -108,7 +105,7 @@ const Basket = observer(() => {
                                         </div>
                                     </Card.Body>
                                 </Card>
-                                <Button variant="danger" className="mt-2" onClick={() => removeFromCart(product.id)}>Удалить</Button>
+                                <Button variant="danger" className="mt-2" onClick={() => removeItemFromCart(product.id)}>Удалить</Button>
                             </Col>
                         ))}
                     </div>
