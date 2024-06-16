@@ -39,6 +39,9 @@ const Basket = observer(() => {
     const handleOrder = () => {
         setShowModal(true);
     };
+    const removeFromCart = (productId) => {
+    device.removeFromCartAPI(user.id, productId);
+};
 
     const handleSubmit = async (e) => {
         e.preventDefault();
