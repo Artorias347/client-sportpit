@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { observer } from "mobx-react-lite";
 import { Context } from "../index";
 import { Card, Col, Image, Button, Container, Row, Modal, Form, Alert } from "react-bootstrap";
@@ -7,23 +7,17 @@ import { Link } from 'react-router-dom';
 import { SHOP_ROUTE } from "../utils/consts";
 
 const Basket = observer(() => {
-    const { device, user } = useContext(Context); // предполагается, что у вас есть объект user в контексте
+    const { device } = useContext(Context);
     const [showModal, setShowModal] = useState(false);
     const [orderData, setOrderData] = useState({
         name: '',
         address: '',
         email: ''
     });
-    const [orderPlaced, setOrderPlaced] = useState(false);
+    const [orderPlaced, setOrderPlaced] = useState(false); // State to track if order is placed
 
-    useEffect(() => {
-        if (user.isAuth) {
-            device.fetchCart(user.id); // Получение корзины пользователя при загрузке компонента
-        }
-    }, [device, user]);
-
-    const removeFromCart = (productId) => {
-        device.removeFromCartAPI(user.id, productId); // Удаление товара из корзины через API
+    const removeFromCart = (product) => {
+        device.removeFromCart(product);
     };
 
     const getTypeName = (typeId) => {
@@ -40,34 +34,12 @@ const Basket = observer(() => {
         setShowModal(true);
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        try {
-            const order = {
-                ...orderData,
-                cart: device.cart.map(item => ({
-                    id: item.id,
-                    quantity: item.quantity
-                }))
-            };
-            // Отправка заказа на сервер
-            const response = await fetch('/api/order/place', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(order)
-            });
-            if (response.ok) {
-                setOrderPlaced(true); // Установка флага, что заказ оформлен успешно
-                device.clearCartAPI(user.id); // Очистка корзины после успешного оформления заказа через API
-            } else {
-                console.error('Ошибка при оформлении заказа:', response.statusText);
-            }
-            setShowModal(false);
-        } catch (error) {
-            console.error('Ошибка при отправке заказа:', error);
-        }
+        // Здесь можно обработать отправку данных, например, отправить на сервер
+        console.log('Order Data:', orderData);
+        setShowModal(false);
+        setOrderPlaced(true); // Set orderPlaced to true after submitting the form
     };
 
     const handleChange = (e) => {
@@ -79,7 +51,7 @@ const Basket = observer(() => {
     };
 
     const handleReturnToMain = () => {
-        setOrderPlaced(false); // Сброс флага оформления заказа
+        setOrderPlaced(false); // Reset orderPlaced state
     };
 
     return (
@@ -98,7 +70,7 @@ const Basket = observer(() => {
                                         <Card.Subtitle className="mb-2 text-muted" style={{ fontSize: '0.8rem' }}>Тип: {getTypeName(product.typeId)}</Card.Subtitle>
                                         <Card.Subtitle className="mb-2 text-muted" style={{ fontSize: '0.8rem' }}>Бренд: {getBrandName(product.brandId)}</Card.Subtitle>
                                         <div className="d-flex justify-content-between align-items-center mt-auto">
-                                            <span style={{ fontSize: '0.8rem' }}>{product.quantity} шт.</span>
+                                            <span style={{ fontSize: '0.8rem' }}>{product.brand}</span>
                                             <div className="d-flex align-items-center">
                                                 <span style={{ fontSize: '0.8rem' }}>{product.rating}</span>
                                                 <Image width={14} height={14} src={star} />
@@ -115,7 +87,7 @@ const Basket = observer(() => {
                     ) : (
                         <Alert variant="warning" className="mt-3">Добавьте товар в корзину</Alert>
                     )}
-                    {orderPlaced && (
+                    {orderPlaced && ( // Display the message and return button if order is placed
                         <div className="mt-3">
                             <Alert variant="success">Заказ оформлен успешно!</Alert>
                             <Link to={SHOP_ROUTE} className="btn btn-primary mt-3">
