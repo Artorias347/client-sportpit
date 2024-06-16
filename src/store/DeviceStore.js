@@ -61,17 +61,23 @@ export default class DeviceStore {
     setShowDiscounted(value) {
         this._showDiscounted = value;
     }
-    setCart(cart) {
-        this._cart = cart;
-    }
     addToCart(product) {
         this._cart.push(product);
     }
-    removeFromCart(productId) {
-        this._cart = this._cart.filter(item => item.id !== productId);
+    removeFromCart(product) {
+        this._cart = this._cart.filter(item => item.id !== product.id);
     }
-    clearCart() {
-        this._cart = [];
+
+    updateStock(productId, stock) {
+        this._devices = this._devices.map(device =>
+            device.id === productId ? { ...device, stock } : device
+        );
+    }
+     updateProduct(productId, updatedProductData) {
+        const index = this.devices.findIndex(product => product.id === productId);
+        if (index !== -1) {
+            this.devices[index] = { ...this.devices[index], ...updatedProductData };
+        }
     }
 
     async fetchDevices() {
@@ -80,42 +86,6 @@ export default class DeviceStore {
             this.setDevices(response.data);
         } catch (error) {
             console.error('Failed to fetch devices', error);
-        }
-    }
-
-    async fetchCart(userId) {
-        try {
-            const response = await axios.get(`your-api-endpoint/cart?userId=${userId}`);
-            this.setCart(response.data.products);
-        } catch (error) {
-            console.error('Failed to fetch cart', error);
-        }
-    }
-
-    async addToCartAPI(userId, product) {
-        try {
-            const response = await axios.post('your-api-endpoint/cart', { userId, product });
-            this.setCart(response.data.products);
-        } catch (error) {
-            console.error('Failed to add to cart', error);
-        }
-    }
-
-    async removeFromCartAPI(userId, productId) {
-        try {
-            const response = await axios.delete(`your-api-endpoint/cart/${productId}?userId=${userId}`);
-            this.setCart(response.data.products);
-        } catch (error) {
-            console.error('Failed to remove from cart', error);
-        }
-    }
-
-    async clearCartAPI(userId) {
-        try {
-            const response = await axios.post(`your-api-endpoint/cart/clear`, { userId });
-            this.setCart([]);
-        } catch (error) {
-            console.error('Failed to clear cart', error);
         }
     }
 
