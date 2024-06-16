@@ -36,9 +36,19 @@ const Basket = observer(() => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         try {
-            // Отправка данных о заказе на сервер
+            // Логирование данных заказа перед отправкой
+            console.log('Отправка данных заказа:', {
+                name: orderData.name,
+                address: orderData.address,
+                email: orderData.email,
+                cart: device.cart.map(product => ({
+                    id: product.id,
+                    quantity: 1
+                }))
+            });
+
             const response = await fetch('/api/order/create', {
                 method: 'POST',
                 headers: {
@@ -65,7 +75,8 @@ const Basket = observer(() => {
             setOrderPlaced(true);
         } catch (error) {
             console.error('Ошибка при оформлении заказа:', error);
-            // Обработка ошибки (например, показ сообщения об ошибке)
+            // Дополнительная обработка ошибки
+            alert('Ошибка при оформлении заказа: ' + error.message);
         }
     };
 
