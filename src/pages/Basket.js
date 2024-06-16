@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { SHOP_ROUTE } from "../utils/consts";
 
 const Basket = observer(() => {
-    const { device, user } = useContext(Context); // предполагается, что у вас есть объект user в контексте
+    const { device, user } = useContext(Context);
     const [showModal, setShowModal] = useState(false);
     const [orderData, setOrderData] = useState({
         name: '',
@@ -18,12 +18,12 @@ const Basket = observer(() => {
 
     useEffect(() => {
         if (user.isAuth) {
-            device.fetchCart(user.id); // Получение корзины пользователя при загрузке компонента
+            device.fetchCart(user.id);
         }
     }, [device, user]);
 
     const removeFromCart = (productId) => {
-        device.removeFromCartAPI(user.id, productId); // Удаление товара из корзины через API
+        device.removeFromCartAPI(user.id, productId);
     };
 
     const getTypeName = (typeId) => {
@@ -50,7 +50,6 @@ const Basket = observer(() => {
                     quantity: item.quantity
                 }))
             };
-            // Отправка заказа на сервер
             const response = await fetch('/api/order/place', {
                 method: 'POST',
                 headers: {
@@ -59,8 +58,8 @@ const Basket = observer(() => {
                 body: JSON.stringify(order)
             });
             if (response.ok) {
-                setOrderPlaced(true); // Установка флага, что заказ оформлен успешно
-                device.clearCartAPI(user.id); // Очистка корзины после успешного оформления заказа через API
+                setOrderPlaced(true);
+                device.clearCartAPI(user.id);
             } else {
                 console.error('Ошибка при оформлении заказа:', response.statusText);
             }
@@ -79,7 +78,7 @@ const Basket = observer(() => {
     };
 
     const handleReturnToMain = () => {
-        setOrderPlaced(false); // Сброс флага оформления заказа
+        setOrderPlaced(false);
     };
 
     return (
@@ -106,7 +105,7 @@ const Basket = observer(() => {
                                         </div>
                                     </Card.Body>
                                 </Card>
-                                <Button variant="danger" className="mt-2" onClick={() => removeFromCart(product)}>Удалить</Button>
+                                <Button variant="danger" className="mt-2" onClick={() => removeFromCart(product.id)}>Удалить</Button>
                             </Col>
                         ))}
                     </div>
