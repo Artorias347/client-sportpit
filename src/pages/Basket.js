@@ -14,7 +14,7 @@ const Basket = observer(() => {
         address: '',
         email: ''
     });
-    const [orderPlaced, setOrderPlaced] = useState(false); // State to track if order is placed
+    const [orderPlaced, setOrderPlaced] = useState(false);
 
     const removeFromCart = (product) => {
         device.removeFromCart(product);
@@ -34,12 +34,39 @@ const Basket = observer(() => {
         setShowModal(true);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Здесь можно обработать отправку данных, например, отправить на сервер
-        console.log('Order Data:', orderData);
-        setShowModal(false);
-        setOrderPlaced(true); // Set orderPlaced to true after submitting the form
+        
+        try {
+            // Отправка данных о заказе на сервер
+            const response = await fetch('/api/order/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: orderData.name,
+                    address: orderData.address,
+                    email: orderData.email,
+                    cart: device.cart.map(product => ({
+                        id: product.id,
+                        quantity: 1 // Рассмотрите логику для учета количества товаров
+                    }))
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Ошибка при оформлении заказа');
+            }
+
+            const data = await response.json();
+            console.log('Заказ успешно оформлен:', data);
+            setShowModal(false);
+            setOrderPlaced(true);
+        } catch (error) {
+            console.error('Ошибка при оформлении заказа:', error);
+            // Обработка ошибки (например, показ сообщения об ошибке)
+        }
     };
 
     const handleChange = (e) => {
@@ -51,7 +78,7 @@ const Basket = observer(() => {
     };
 
     const handleReturnToMain = () => {
-        setOrderPlaced(false); // Reset orderPlaced state
+        setOrderPlaced(false);
     };
 
     return (
@@ -87,7 +114,7 @@ const Basket = observer(() => {
                     ) : (
                         <Alert variant="warning" className="mt-3">Добавьте товар в корзину</Alert>
                     )}
-                    {orderPlaced && ( // Display the message and return button if order is placed
+                    {orderPlaced && (
                         <div className="mt-3">
                             <Alert variant="success">Заказ оформлен успешно!</Alert>
                             <Link to={SHOP_ROUTE} className="btn btn-primary mt-3">
