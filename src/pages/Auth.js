@@ -37,15 +37,9 @@ const Auth = observer(() => {
     };
 
     const handleResetPassword = async () => {
-        try {
             await resetPassword(resetEmail);
             setNotification('Новый пароль отправлен на вашу почту');
             setTimeout(() => setNotification(''), 3000);  // Скрыть уведомление через 3 секунды
-        } catch (e) {
-            setNotification('Что-то пошло не так');
-            setTimeout(() => setNotification(''), 3000);  // Скрыть уведомление через 3 секунды
-        } finally {
-            setShowResetModal(false);
         }
     };
 
