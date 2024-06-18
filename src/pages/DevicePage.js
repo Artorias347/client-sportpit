@@ -3,6 +3,7 @@ import { Button, Card, Col, Container, Image, Row } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
 import { fetchOneDevice } from '../http/deviceAPI';
 import { Context } from '../index';
+import Notification from '../components/Notification';
 
 const DevicePage = () => {
   const [device, setDevice] = useState({ info: [] });
