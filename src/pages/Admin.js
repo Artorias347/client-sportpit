@@ -34,20 +34,6 @@ const Admin = () => {
             >
                 Добавить товар
             </Button>
-            <Button
-                variant="outline-dark"
-                className="mt-4 p-2"
-                onClick={() => setTypeVisible(true)}
-            >
-                Удалить тип
-            </Button>
-            <Button
-                variant="outline-dark"
-                className="mt-4 p-2"
-                onClick={() => setBrandVisible(true)}
-            >
-                Удалить бренд
-            </Button>
             <Link to={MANAGEPRODUCTS_ROUTE}>
                 <Button
                     variant="outline-dark"
