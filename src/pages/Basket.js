@@ -15,7 +15,7 @@ const Basket = observer(() => {
         email: ''
     });
     const [orderPlaced, setOrderPlaced] = useState(false);
-    const [tempOrder, setTempOrder] = useState(null);
+    const [showReturnButton, setShowReturnButton] = useState(true);
 
     const removeFromCart = (product) => {
         device.removeFromCart(product);
@@ -50,7 +50,6 @@ const Basket = observer(() => {
 
         console.log('Симуляция отправки данных заказа:', simulatedOrder);
 
-        setTempOrder(simulatedOrder);
         setShowModal(false);
         setOrderPlaced(true);
     };
@@ -64,7 +63,7 @@ const Basket = observer(() => {
     };
 
     const handleReturnToMain = () => {
-        setOrderPlaced(false);
+        setShowReturnButton(false);
     };
 
     return (
@@ -105,9 +104,11 @@ const Basket = observer(() => {
                             <Alert variant="success">Заказ оформлен успешно!</Alert>
                         </div>
                     )}
-                    <Link to={SHOP_ROUTE} className="btn btn-primary mt-3">
-                        Вернуться на главную
-                    </Link>
+                    {showReturnButton && (
+                        <Link to={SHOP_ROUTE} className="btn btn-primary mt-3" onClick={handleReturnToMain}>
+                            Вернуться на главную
+                        </Link>
+                    )}
                 </div>
             </Row>
 
@@ -156,30 +157,6 @@ const Basket = observer(() => {
                     </Form>
                 </Modal.Body>
             </Modal>
-
-            {tempOrder && (
-                <Modal show={orderPlaced} onHide={() => setOrderPlaced(false)}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Детали заказа</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <p><strong>ФИО:</strong> {tempOrder.name}</p>
-                        <p><strong>Адрес:</strong> {tempOrder.address}</p>
-                        <p><strong>Email:</strong> {tempOrder.email}</p>
-                        <h5>Товары:</h5>
-                        <ul>
-                            {tempOrder.cart.map((item, index) => (
-                                <li key={index}>ID товара: {item.id}, Количество: {item.quantity}</li>
-                            ))}
-                        </ul>
-                    </Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="secondary" onClick={() => setOrderPlaced(false)}>
-                            Закрыть
-                        </Button>
-                    </Modal.Footer>
-                </Modal>
-            )}
         </Container>
     );
 });
