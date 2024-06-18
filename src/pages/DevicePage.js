@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { fetchOneDevice } from '../http/deviceAPI';
 import { Context } from '../index';
 import Notification from '../components/Notification';
-import Review from '../Review';
+import Review from './Review';
 
 const DevicePage = () => {
   const [device, setDevice] = useState({ info: [] });
