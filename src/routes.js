@@ -30,7 +30,7 @@ export const publicRoutes = [
     },
 
     {
-        path: REVIEW_ROUTE,
+        path: FEEDBACK_ROUTE,
         Component: Review
     },
         
