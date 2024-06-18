@@ -2,40 +2,40 @@ import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Button, ListGroup } from 'react-bootstrap';
 import { $host } from "../http/index";
 
-const Reviews = () => {
-  const [reviews, setReviews] = useState([]);
-  const [newReview, setNewReview] = useState('');
+const Feedback = () => {
+  const [feedback, setfeedback] = useState([]);
+  const [newfeedback, setNewfeedback] = useState('');
   const [author, setAuthor] = useState('');
 
-  const fetchReviews = async () => {
+  const fetchFeedback = async () => {
     try {
-      const response = await $host.get('/api/review');
-      setReviews(response.data);
+      const response = await $host.get('/api/feedback');
+      setfeedback(response.data);
     } catch (error) {
       console.error('Ошибка при получении отзывов:', error);
     }
   };
 
   useEffect(() => {
-    fetchReviews();
+    fetchfeedback();
   }, []);
 
-  const handleReviewChange = (e) => {
-    setNewReview(e.target.value);
+  const handlefeedbackChange = (e) => {
+    setNewfeedback(e.target.value);
   };
 
   const handleAuthorChange = (e) => {
     setAuthor(e.target.value);
   };
 
-  const handleSubmitReview = async (e) => {
+  const handleSubmitfeedback = async (e) => {
     e.preventDefault();
     try {
-      await $host.post('/api/review', { text: newReview, author: author });
-      setNewReview('');
+      await $host.post('/api/feedback', { text: newfeedback, author: author });
+      setNewfeedback('');
       setAuthor('');
       // После добавления отзыва обновляем список отзывов
-      fetchReviews();
+      fetchfeedback();
     } catch (error) {
       console.error('Ошибка при добавлении отзыва:', error);
     }
@@ -51,14 +51,14 @@ const Reviews = () => {
       <Row>
         <Col style={{marginTop: '30px'}}>
           <h2>Добавить отзыв</h2>
-          <Form onSubmit={handleSubmitReview}>
-            <Form.Group controlId="formReview">
+          <Form onSubmit={handleSubmitfeedback}>
+            <Form.Group controlId="formfeedback">
               <Form.Label></Form.Label>
               <Form.Control
                 as="textarea"
                 rows={3}
-                value={newReview}
-                onChange={handleReviewChange}
+                value={newfeedback}
+                onChange={handlefeedbackChange}
               />
             </Form.Group>
             <Form.Group controlId="formAuthor">
@@ -79,11 +79,11 @@ const Reviews = () => {
         <Col style={{marginTop: '30px'}}>
           <h2>Все отзывы</h2>
           <ListGroup>
-            {reviews.map((review, index) => (
+            {feedback.map((feedback, index) => (
               <ListGroup.Item key={index}>
-                <strong>{review.author}: </strong>
-                {review.text}
-                <div style={{fontSize: '0.8em', marginTop: '5px'}}>Добавлено: {review.time}</div>
+                <strong>{feedback.author}: </strong>
+                {feedback.text}
+                <div style={{fontSize: '0.8em', marginTop: '5px'}}>Добавлено: {feedback.time}</div>
               </ListGroup.Item>
             ))}
           </ListGroup>
@@ -93,4 +93,4 @@ const Reviews = () => {
   );
 };
 
-export default Reviews;
+export default feedback;
