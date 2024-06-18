@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE } from "../utils/consts";
-import { login, registration, check, resetPassword } from "../http/userAPI";  // Предполагается, что у вас есть функция resetPassword
+import { login, registration, resetPassword } from "../http/userAPI";
 import { observer } from "mobx-react-lite";
 import { Context } from "../index";
 
@@ -18,7 +18,7 @@ const Auth = observer(() => {
     const [password, setPassword] = useState('');
     const [showResetModal, setShowResetModal] = useState(false);
     const [resetEmail, setResetEmail] = useState('');
-    const [resetNotification, setResetNotification] = useState('');
+    const [notification, setNotification] = useState('');
 
     const click = async () => {
         try {
@@ -32,16 +32,20 @@ const Auth = observer(() => {
             user.setIsAuth(true);
             navigate(SHOP_ROUTE);
         } catch (e) {
-            alert(e.response?.data?.message || 'Something went wrong');
+            alert(e.response?.data?.message || 'Что-то пошло не так');
         }
     };
 
     const handleResetPassword = async () => {
         try {
             await resetPassword(resetEmail);
-            setResetNotification('Новый пароль отправлен на вашу почту');
+            setNotification('Новый пароль отправлен на вашу почту');
+            setTimeout(() => setNotification(''), 3000);  // Скрыть уведомление через 3 секунды
         } catch (e) {
-            setResetNotification(e.response?.data?.message || 'Что-то пошло не так');
+            setNotification('Что-то пошло не так');
+            setTimeout(() => setNotification(''), 3000);  // Скрыть уведомление через 3 секунды
+        } finally {
+            setShowResetModal(false);
         }
     };
 
@@ -105,7 +109,6 @@ const Auth = observer(() => {
                                 onChange={e => setResetEmail(e.target.value)}
                             />
                         </Form.Group>
-                        {resetNotification && <p>{resetNotification}</p>}
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
@@ -117,6 +120,12 @@ const Auth = observer(() => {
                     </Button>
                 </Modal.Footer>
             </Modal>
+
+            {notification && (
+                <div className="notification">
+                    {notification}
+                </div>
+            )}
         </Container>
     );
 });
