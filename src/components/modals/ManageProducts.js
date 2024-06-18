@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext, useCallback } from 'react';
 import { Table, Button, Modal, Form } from 'react-bootstrap';
 import { observer } from "mobx-react-lite";
 import { Context } from '../../index';
-import { fetchDevices, updateDevice } from '../../http/deviceAPI';
+import { fetchDevices, updateDevice, deleteDevice } from '../../http/deviceAPI'; // импортируем функцию для удаления
 
 const ManageProducts = observer(() => {
     const { device } = useContext(Context);
@@ -47,6 +47,15 @@ const ManageProducts = observer(() => {
         }
     };
 
+    const handleDelete = async (productId) => {
+        try {
+            await deleteDevice(productId);
+            await fetchProducts(); // Повторно получаем обновленные данные
+        } catch (error) {
+            console.error('Ошибка удаления товара:', error);
+        }
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setUpdatedProduct({
@@ -81,6 +90,9 @@ const ManageProducts = observer(() => {
                             <td>
                                 <Button variant="warning" onClick={() => handleEdit(product)}>
                                     Редактировать
+                                </Button>
+                                <Button variant="danger" className="ml-2" onClick={() => handleDelete(product.id)}>
+                                    Удалить
                                 </Button>
                             </td>
                         </tr>
