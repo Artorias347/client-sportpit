@@ -93,4 +93,4 @@ const Feedback = () => {
   );
 };
 
-export default feedback;
+export default Feedback;
