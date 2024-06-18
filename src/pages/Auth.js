@@ -8,6 +8,8 @@ import { LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE } from "../utils/consts";
 import { login, registration } from "../http/userAPI";
 import { observer } from "mobx-react-lite";
 import { Context } from "../index";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Auth = observer(() => {
     const { user } = useContext(Context);
@@ -17,7 +19,6 @@ const Auth = observer(() => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showResetModal, setShowResetModal] = useState(false);
-    const [notification, setNotification] = useState('');
 
     const click = async () => {
         try {
@@ -36,8 +37,7 @@ const Auth = observer(() => {
     };
 
     const handleResetPassword = () => {
-        setNotification('Мы отправили вам по электронной почте инструкции по установке пароля, если существует учетная запись с указанным вами адресом электронной почты. Вы должны получить их в ближайшее время. Если вы не получили электронное письмо, убедитесь, что вы ввели адрес, под которым зарегистрировались, и проверьте папку со спамом..');
-        setTimeout(() => setNotification(''), 3000); // Скрыть уведомление через 3 секунды
+        toast.success('Мы отправили вам по электронной почте инструкции по установке пароля, если существует учетная запись с указанным вами адресом электронной почты. Вы должны получить их в ближайшее время. Если вы не получили электронное письмо, убедитесь, что вы ввели адрес, под которым зарегистрировались, и проверьте папку со спамом.');
         setShowResetModal(false);
     };
 
@@ -113,11 +113,7 @@ const Auth = observer(() => {
                 </Modal.Footer>
             </Modal>
 
-            {notification && (
-                <div className="notification">
-                    {notification}
-                </div>
-            )}
+            <ToastContainer />
         </Container>
     );
 });
