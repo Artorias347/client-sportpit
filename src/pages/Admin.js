@@ -34,15 +34,14 @@ const Admin = () => {
             >
                 Добавить товар
             </Button>
-            <Link to={MANAGEPRODUCTS_ROUTE}>
-                <Button
+            <Button
+                <Link to={MANAGEPRODUCTS_ROUTE}>
                     variant="outline-dark"
                     className="mt-4 p-2"
                 >
                     Управление товаром
-                </Button>
-            </Link>
-
+                </Link>
+            </Button>
             <CreateBrand show={brandVisible} onHide={() => setBrandVisible(false)} />
             <CreateDevice show={deviceVisible} onHide={() => setDeviceVisible(false)} />
             <CreateType show={typeVisible} onHide={() => setTypeVisible(false)} />
