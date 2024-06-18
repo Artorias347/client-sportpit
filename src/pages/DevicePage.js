@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { fetchOneDevice } from '../http/deviceAPI';
 import { Context } from '../index';
 import Notification from '../components/Notification';
-import Reviews from './Review';
+import Feedback from './Feedback';
 
 const DevicePage = () => {
   const [device, setDevice] = useState({ info: [] });
@@ -57,7 +57,7 @@ const DevicePage = () => {
         ))}
       </Row>
       <Row className="d-flex flex-column m-3">
-        <Reviews />
+        <Feedback />
       </Row>
     </Container>
   );
