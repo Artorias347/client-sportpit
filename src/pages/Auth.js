@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { LOGIN_ROUTE, REGISTRATION_ROUTE, SHOP_ROUTE } from "../utils/consts";
-import { login, registration, resetPassword } from "../http/userAPI";
+import { login, registration } from "../http/userAPI";
 import { observer } from "mobx-react-lite";
 import { Context } from "../index";
 
@@ -17,7 +17,6 @@ const Auth = observer(() => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showResetModal, setShowResetModal] = useState(false);
-    const [resetEmail, setResetEmail] = useState('');
     const [notification, setNotification] = useState('');
 
     const click = async () => {
@@ -36,11 +35,10 @@ const Auth = observer(() => {
         }
     };
 
-    const handleResetPassword = async () => {
-            await resetPassword(resetEmail);
-            setNotification('Новый пароль отправлен на вашу почту');
-            setTimeout(() => setNotification(''), 3000);  // Скрыть уведомление через 3 секунды
-        }
+    const handleResetPassword = () => {
+        setNotification('Новый пароль отправлен на вашу почту');
+        setTimeout(() => setNotification(''), 3000); // Скрыть уведомление через 3 секунды
+        setShowResetModal(false);
     };
 
     return (
@@ -99,8 +97,8 @@ const Auth = observer(() => {
                             <Form.Control
                                 type="email"
                                 placeholder="Введите email"
-                                value={resetEmail}
-                                onChange={e => setResetEmail(e.target.value)}
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
                             />
                         </Form.Group>
                     </Form>
