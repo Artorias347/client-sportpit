@@ -17,7 +17,7 @@ const Feedback = () => {
   };
 
   useEffect(() => {
-    fetchfeedback();
+    fetchFeedback();
   }, []);
 
   const handleFeedbackChange = (e) => {
@@ -35,7 +35,7 @@ const Feedback = () => {
       setNewfeedback('');
       setAuthor('');
       // После добавления отзыва обновляем список отзывов
-      fetchfeedback();
+      fetchFeedback();
     } catch (error) {
       console.error('Ошибка при добавлении отзыва:', error);
     }
@@ -58,7 +58,7 @@ const Feedback = () => {
                 as="textarea"
                 rows={3}
                 value={newfeedback}
-                onChange={handlefeedbackChange}
+                onChange={handleFeedbackChange}
               />
             </Form.Group>
             <Form.Group controlId="formAuthor">
