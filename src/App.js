@@ -33,10 +33,21 @@ const App = observer(() => {
     }, []); // Пустой массив зависимостей, чтобы этот эффект выполнялся только один раз при монтировании
 
     useEffect(() => {
-        check().then(data => {
-            user.setUser(true);
-            user.setIsAuth(true);
-        }).finally(() => setLoading(false));
+        check()
+            .then(data => {
+                user.setUser(true);
+                user.setIsAuth(true);
+            })
+            .catch(error => {
+                if (error.response && error.response.status === 401) {
+                    // Игнорируем ошибку 401
+                    console.warn('Request failed with status code 401');
+                } else {
+                    // Обрабатываем другие ошибки
+                    console.error('An error occurred:', error);
+                }
+            })
+            .finally(() => setLoading(false));
     }, [user]);
 
     if (loading) {
