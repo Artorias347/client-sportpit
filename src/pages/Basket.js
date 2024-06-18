@@ -5,7 +5,7 @@ import { Card, Col, Image, Button, Container, Row, Modal, Form, Alert } from "re
 import star from '../assets/star.png';
 import { Link } from 'react-router-dom';
 import { SHOP_ROUTE } from "../utils/consts";
-import Notification from './components/Notification';
+import Notification from '../../Notification';
 
 const Basket = observer(() => {
     const { device } = useContext(Context);
