@@ -2,12 +2,13 @@ import React, { useState, useContext } from 'react';
 import { observer } from 'mobx-react-lite';
 import { Card, Row, Col, Button, Image } from 'react-bootstrap';
 import { Context } from '../index';
+import { Link } from 'react-router-dom';
 import star from '../assets/star.png';
-import Notification from './Notification'; // Импортируем компонент уведомления
+import Notification from './Notification';
 
 const DeviceList = observer(() => {
-  const { device, user } = useContext(Context); // Доступ к user из контекста
-  const [showNotification, setShowNotification] = useState(false); // Состояние для отображения уведомления
+  const { device, user } = useContext(Context);
+  const [showNotification, setShowNotification] = useState(false);
 
   const chunkArray = (array, size) => {
     const chunkedArr = [];
@@ -21,8 +22,8 @@ const DeviceList = observer(() => {
 
   const addToCart = (product) => {
     device.addToCart(product);
-    setShowNotification(true); // Показываем уведомление при добавлении товара в корзину
-    setTimeout(() => setShowNotification(false), 3000); // Скрыть уведомление через 3 секунды
+    setShowNotification(true);
+    setTimeout(() => setShowNotification(false), 3000);
   };
 
   const getTypeName = (typeId) => {
@@ -37,7 +38,7 @@ const DeviceList = observer(() => {
 
   return (
     <Row>
-      {showNotification && <Notification message="Товар добавлен в корзину" />} {/* Отображение уведомления */}
+      {showNotification && <Notification message="Товар добавлен в корзину" />}
       {chunkedDevices.map((row, rowIndex) => (
         <Row className="mb-4" key={rowIndex}>
           {row.map(product => (
@@ -64,12 +65,13 @@ const DeviceList = observer(() => {
                       <Image width={14} height={14} src={star} />
                     </div>
                   </div>
-                  {user.isAuth && ( // Проверка авторизации
+                  <Link to={`/device/${product.id}`} className="btn btn-primary mt-2 align-self-end">Подробнее</Link>
+                  {user.isAuth && (
                     <Button 
                       variant="success" 
                       className="mt-2 align-self-end" 
                       onClick={() => addToCart(product)}
-                      disabled={product.stock === 0} // Отключение кнопки, если товар отсутствует
+                      disabled={product.stock === 0}
                     >
                       Купить
                     </Button>
