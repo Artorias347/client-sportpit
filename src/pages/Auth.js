@@ -16,8 +16,7 @@ const Auth = observer(() => {
     const isLogin = location.pathname === LOGIN_ROUTE;
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [showResetForm, setShowResetForm] = useState(false);
-    const [resetEmail, setResetEmail] = useState('');
+    const [showResetModal, setShowResetModal] = useState(false);
     const [notification, setNotification] = useState('');
 
     const click = async () => {
@@ -38,10 +37,8 @@ const Auth = observer(() => {
 
     const handleResetPassword = () => {
         setNotification('Новый пароль отправлен на вашу почту');
-        setTimeout(() => {
-            setNotification('');
-            setShowResetForm(false);
-        }, 3000);
+        setTimeout(() => setNotification(''), 3000); // Скрыть уведомление через 3 секунды
+        setShowResetModal(false);
     };
 
     return (
@@ -52,68 +49,75 @@ const Auth = observer(() => {
             <Card style={{ width: 600 }} className="p-5">
                 <h2 className="m-auto">{isLogin ? 'Авторизация' : "Регистрация"}</h2>
                 <Form className="d-flex flex-column">
-                    {showResetForm ? (
-                        <>
+                    <Form.Control
+                        className="mt-3"
+                        placeholder="Введите ваш email..."
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                    />
+                    <Form.Control
+                        className="mt-3"
+                        placeholder="Введите ваш пароль..."
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                        type="password"
+                    />
+                    <Row className="d-flex justify-content-between mt-3 pl-3 pr-3">
+                        {isLogin ? (
+                            <div>
+                                Нет аккаунта? <NavLink to={REGISTRATION_ROUTE}>Зарегистрируйся!</NavLink>
+                                <br />
+                                <Button variant="link" onClick={() => setShowResetModal(true)}>
+                                    Забыли пароль?
+                                </Button>
+                            </div>
+                        ) : (
+                            <div>
+                                Есть аккаунт? <NavLink to={LOGIN_ROUTE}>Войдите!</NavLink>
+                            </div>
+                        )}
+                        <Button
+                            variant={"outline-success"}
+                            onClick={click}
+                        >
+                            {isLogin ? 'Войти' : 'Регистрация'}
+                        </Button>
+                    </Row>
+                </Form>
+            </Card>
+
+            <Modal show={showResetModal} onHide={() => setShowResetModal(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Восстановление пароля</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group controlId="formBasicEmail">
+                            <Form.Label>Введите ваш email</Form.Label>
                             <Form.Control
-                                className="mt-3"
-                                placeholder="Введите ваш email..."
-                                value={resetEmail}
-                                onChange={e => setResetEmail(e.target.value)}
-                            />
-                            <Button
-                                variant={"outline-success"}
-                                className="mt-3"
-                                onClick={handleResetPassword}
-                            >
-                                Восстановить пароль
-                            </Button>
-                            {notification && (
-                                <div className="mt-3 text-success">
-                                    {notification}
-                                </div>
-                            )}
-                        </>
-                    ) : (
-                        <>
-                            <Form.Control
-                                className="mt-3"
-                                placeholder="Введите ваш email..."
+                                type="email"
+                                placeholder="Введите email"
                                 value={email}
                                 onChange={e => setEmail(e.target.value)}
                             />
-                            <Form.Control
-                                className="mt-3"
-                                placeholder="Введите ваш пароль..."
-                                value={password}
-                                onChange={e => setPassword(e.target.value)}
-                                type="password"
-                            />
-                            <Row className="d-flex justify-content-between mt-3 pl-3 pr-3">
-                                <div>
-                                    {isLogin ? (
-                                        <>
-                                            Нет аккаунта? <NavLink to={REGISTRATION_ROUTE}>Зарегистрируйся!</NavLink>
-                                            <Button variant="link" onClick={() => setShowResetForm(true)} style={{ paddingLeft: 0 }}>
-                                                Забыли пароль?
-                                            </Button>
-                                        </>
-                                    ) : (
-                                        <div>
-                                            Есть аккаунт? <NavLink to={LOGIN_ROUTE}>Войдите!</NavLink>
-                                        </div>
-                                    )}
-                                </div>
-                                <Button
-                                    variant={"outline-success"}
-                                    onClick={click}
-                                >
-                                    {isLogin ? 'Войти' : 'Регистрация'}
-                                </Button>
-                            </Row>
-                        </>
-                    )}
-                </Form>
-            </Card>
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setShowResetModal(false)}>
+                        Закрыть
+                    </Button>
+                    <Button variant="primary" onClick={handleResetPassword}>
+                        Отправить новый пароль
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            {notification && (
+                <div className="notification">
+                    {notification}
+                </div>
+            )}
         </Container>
     );
 });
