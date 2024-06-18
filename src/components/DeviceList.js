@@ -6,7 +6,7 @@ import star from '../assets/star.png';
 import Notification from './Notification'; // Импортируем компонент уведомления
 
 const DeviceList = observer(() => {
-  const { device, auth } = useContext(Context); // Предположим, что у вас есть контекст для устройств (device) и авторизации (auth)
+  const { device, user } = useContext(Context); // Доступ к user из контекста
   const [showNotification, setShowNotification] = useState(false); // Состояние для отображения уведомления
 
   const chunkArray = (array, size) => {
@@ -64,7 +64,7 @@ const DeviceList = observer(() => {
                       <Image width={14} height={14} src={star} />
                     </div>
                   </div>
-                  {auth.isAuthenticated ? ( // Проверка авторизации
+                  {user.isAuth && ( // Проверка авторизации
                     <Button 
                       variant="success" 
                       className="mt-2 align-self-end" 
@@ -73,10 +73,6 @@ const DeviceList = observer(() => {
                     >
                       Купить
                     </Button>
-                  ) : (
-                    <div className="mt-2 align-self-end">
-                      <span style={{ color: 'red' }}>Необходима авторизация для покупки</span>
-                    </div>
                   )}
                 </Card.Body>
               </Card>
