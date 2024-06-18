@@ -20,7 +20,7 @@ const Feedback = () => {
     fetchfeedback();
   }, []);
 
-  const handlefeedbackChange = (e) => {
+  const handleFeedbackChange = (e) => {
     setNewfeedback(e.target.value);
   };
 
