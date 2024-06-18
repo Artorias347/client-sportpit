@@ -32,10 +32,7 @@ const DevicePage = () => {
         <Col md={8}>
           <Row>
             <Col>
-              <h6 className="text-muted">{device.category || 'Сывороточный'}</h6>
               <h2>{device.name}</h2>
-              <h6 className="text-danger">{device.reviews?.length > 0 ? `${device.reviews.length} отзывов` : 'нет отзывов'}</h6>
-              <h4>{device.stock > 0 ? 'В наличии' : 'Нет в наличии'}</h4>
             </Col>
           </Row>
           <Row className="mt-3">
@@ -47,17 +44,6 @@ const DevicePage = () => {
               >
                 Добавить в корзину
               </Button>
-            </Col>
-          </Row>
-          <Row className="mt-3">
-            <Col>
-              <Card className="p-2 border-0">
-                <Card.Body>
-                  <Alert variant="danger" className="mb-0">
-                    Обратите внимание на <a href="#" className="text-danger text-decoration-underline">условия бесплатной доставки</a>
-                  </Alert>
-                </Card.Body>
-              </Card>
             </Col>
           </Row>
         </Col>
