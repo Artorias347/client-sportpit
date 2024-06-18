@@ -3,7 +3,7 @@ import { Context } from "../index";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { NavLink } from "react-router-dom";
-import { ADMIN_ROUTE, SHOP_ROUTE, LOGIN_ROUTE, HOME_ROUTE, BASKET_ROUTE, FEEDBACK_ROUTE } from "../utils/consts";
+import { ADMIN_ROUTE, SHOP_ROUTE, LOGIN_ROUTE, HOME_ROUTE, BASKET_ROUTE, REVIEW_ROUTE } from "../utils/consts";
 import { Button, Image, Container } from "react-bootstrap";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from 'react-router-dom';
@@ -34,7 +34,7 @@ const NavBar = observer(() => {
                     <NavLink style={{ color: 'white', marginRight: '10px' }} to={SHOP_ROUTE}>
                         <Button variant={"outline-light"}>Магазин</Button>
                     </NavLink>
-                    <NavLink style={{ color: 'white' }} to={FEEDBACK_ROUTE}>
+                    <NavLink style={{ color: 'white' }} to={REVIEW_ROUTE}>
                         <Button variant={"outline-light"}>Обратная связь</Button>
                     </NavLink>
                 </Nav>
