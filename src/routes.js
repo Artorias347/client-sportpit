@@ -5,7 +5,7 @@ import Shop from "./pages/Shop";
 import Auth from "./pages/Auth";
 import DevicePage from "./pages/DevicePage";
 import Home from "./pages/Home";
-import Review from "./pages/Review";
+import FEEDBACK_ROUTE from "./pages/Feedback";
 import ManageProducts from "./components/modals/ManageProducts";
 
 export const authRoutes = [
@@ -31,7 +31,7 @@ export const publicRoutes = [
 
     {
         path: FEEDBACK_ROUTE,
-        Component: Review
+        Component: Feedback
     },
         
     {
