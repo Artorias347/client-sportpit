@@ -34,11 +34,11 @@ const Admin = () => {
             >
                 Добавить товар
             </Button>
-            <Button
-                <Link to={MANAGEPRODUCTS_ROUTE}>
+           <Button
                     variant="outline-dark"
                     className="mt-4 p-2"
                 >
+                <Link to={MANAGEPRODUCTS_ROUTE}>
                     Управление товаром
                 </Link>
             </Button>
