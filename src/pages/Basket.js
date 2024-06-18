@@ -103,11 +103,11 @@ const Basket = observer(() => {
                     {orderPlaced && (
                         <div className="mt-3">
                             <Alert variant="success">Заказ оформлен успешно!</Alert>
-                            <Link to={SHOP_ROUTE} className="btn btn-primary mt-3">
-                                Вернуться на главную
-                            </Link>
                         </div>
                     )}
+                    <Link to={SHOP_ROUTE} className="btn btn-primary mt-3">
+                        Вернуться на главную
+                    </Link>
                 </div>
             </Row>
 
