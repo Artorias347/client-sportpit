@@ -15,7 +15,6 @@ const Basket = observer(() => {
         email: ''
     });
     const [orderPlaced, setOrderPlaced] = useState(false);
-    const [showReturnButton, setShowReturnButton] = useState(true);
 
     const removeFromCart = (product) => {
         device.removeFromCart(product);
@@ -63,7 +62,7 @@ const Basket = observer(() => {
     };
 
     const handleReturnToMain = () => {
-        setShowReturnButton(false);
+        setOrderPlaced(false);
     };
 
     return (
@@ -103,11 +102,6 @@ const Basket = observer(() => {
                         <div className="mt-3">
                             <Alert variant="success">Заказ оформлен успешно!</Alert>
                         </div>
-                    )}
-                    {showReturnButton && (
-                        <Link to={SHOP_ROUTE} className="btn btn-primary mt-3" onClick={handleReturnToMain}>
-                            Вернуться на главную
-                        </Link>
                     )}
                 </div>
             </Row>
@@ -156,6 +150,20 @@ const Basket = observer(() => {
                         </Button>
                     </Form>
                 </Modal.Body>
+            </Modal>
+
+            <Modal show={orderPlaced} onHide={() => setOrderPlaced(false)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Заказ оформлен успешно!</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <p>Ваш заказ был успешно оформлен. Спасибо за покупку!</p>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Link to={SHOP_ROUTE} className="btn btn-primary" onClick={handleReturnToMain}>
+                        Вернуться на главную
+                    </Link>
+                </Modal.Footer>
             </Modal>
         </Container>
     );
